@@ -37,8 +37,8 @@ namespace Wintermute {
 class BaseSurfaceOSystem;
 class RenderTicket {
 public:
-	RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRest, bool mirrorX = false, bool mirrorY = false, bool disableAlpha = false);
-	RenderTicket() : _isValid(true), _wantsDraw(false), _drawNum(0) {}
+	RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRest, bool mirrorX = false, bool mirrorY = false, float rotation = 0.0f, bool disableAlpha = false);
+	RenderTicket() : _isValid(true), _wantsDraw(false), _drawNum(0), _rotation(0.0f) {}
 	~RenderTicket();
 	const Graphics::Surface *getSurface() { return _surface; }
 	// Non-dirty-rects:
@@ -53,6 +53,7 @@ public:
 	bool _wantsDraw;
 	uint32 _drawNum;
 	uint32 _colorMod;
+	float _rotation;
 
 	BaseSurfaceOSystem *_owner;
 	bool operator==(RenderTicket &a);

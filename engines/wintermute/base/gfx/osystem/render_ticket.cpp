@@ -28,11 +28,20 @@
 
 #include "engines/wintermute/graphics/transparent_surface.h"
 #include "engines/wintermute/base/gfx/osystem/render_ticket.h"
+#include "common/textconsole.h"
 
 namespace Wintermute {
 
-RenderTicket::RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, bool disableAlpha) : _owner(owner),
-_srcRect(*srcRect), _dstRect(*dstRect), _drawNum(0), _isValid(true), _wantsDraw(true), _hasAlpha(!disableAlpha) {
+RenderTicket::RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, float rotation, bool disableAlpha) :
+	_owner(owner),
+	_srcRect(*srcRect),
+	_dstRect(*dstRect),
+	_drawNum(0),
+	_isValid(true),
+	_wantsDraw(true),
+	_rotation(rotation),
+	_hasAlpha(!disableAlpha) {
+
 	_colorMod = 0;
 	_batchNum = 0;
 	_mirror = TransparentSurface::FLIP_NONE;
@@ -57,6 +66,9 @@ _srcRect(*srcRect), _dstRect(*dstRect), _drawNum(0), _isValid(true), _wantsDraw(
 			_surface->free();
 			delete _surface;
 			_surface = temp;
+		}
+		if (_rotation) {
+			warning("TODO: Rotate surface %f", _rotation);
 		}
 	} else {
 		_surface = nullptr;
