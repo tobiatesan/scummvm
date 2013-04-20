@@ -80,7 +80,7 @@ public:
 	virtual bool startSpriteBatch() override;
 	virtual bool endSpriteBatch() override;
 	void endSaveLoad();
-	void drawSurface(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, float rotation = 0.0f, bool disableAlpha = false);
+	void drawSurface(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, uint32 rotation = 0, bool disableAlpha = false);
 	void repeatLastDraw(int offsetX, int offsetY, int numTimesX, int numTimesY);
 	BaseSurface *createSurface() override;
 private:

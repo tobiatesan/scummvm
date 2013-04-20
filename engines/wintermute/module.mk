@@ -88,6 +88,7 @@ MODULE_OBJS := \
 	base/saveload.o \
 	detection.o \
 	graphics/transparent_surface.o \
+	graphics/SDL_rotozoom.o \
 	math/math_util.o \
 	math/matrix4.o \
 	math/vector2.o \

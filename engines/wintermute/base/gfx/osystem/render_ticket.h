@@ -37,14 +37,14 @@ namespace Wintermute {
 class BaseSurfaceOSystem;
 class RenderTicket {
 public:
-	RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRest, bool mirrorX = false, bool mirrorY = false, float rotation = 0.0f, bool disableAlpha = false);
-	RenderTicket() : _isValid(true), _wantsDraw(false), _drawNum(0), _rotation(0.0f) {}
+	RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRest, bool mirrorX = false, bool mirrorY = false, uint32 rotation = 0, bool disableAlpha = false);
+	RenderTicket() : _isValid(true), _wantsDraw(false), _drawNum(0), _rotation(0) {}
 	~RenderTicket();
-	const Graphics::Surface *getSurface() { return _surface; }
+	const Graphics::Surface *getSurface() const { return _surface; }
 	// Non-dirty-rects:
-	void drawToSurface(Graphics::Surface *_targetSurface);
+	void drawToSurface(Graphics::Surface *_targetSurface) const;
 	// Dirty-rects:
-	void drawToSurface(Graphics::Surface *_targetSurface, Common::Rect *dstRect, Common::Rect *clipRect);
+	void drawToSurface(Graphics::Surface *_targetSurface, Common::Rect *dstRect, Common::Rect *clipRect) const;
 
 	Common::Rect _dstRect;
 	uint32 _batchNum;
@@ -53,11 +53,11 @@ public:
 	bool _wantsDraw;
 	uint32 _drawNum;
 	uint32 _colorMod;
-	float _rotation;
+	uint32 _rotation;
 
 	BaseSurfaceOSystem *_owner;
-	bool operator==(RenderTicket &a);
-	const Common::Rect *getSrcRect() { return &_srcRect; }
+	bool operator==(const RenderTicket &a) const;
+	const Common::Rect *getSrcRect() const { return &_srcRect; }
 private:
 	Graphics::Surface *_surface;
 	Common::Rect _srcRect;

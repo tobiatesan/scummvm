@@ -52,6 +52,7 @@ BaseSurfaceOSystem::BaseSurfaceOSystem(BaseGame *inGame) : BaseSurface(inGame) {
 	_lockPixels = nullptr;
 	_lockPitch = 0;
 	_loaded = false;
+	_rotation = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -346,7 +347,12 @@ bool BaseSurfaceOSystem::displayZoom(int x, int y, Rect32 rect, float zoomX, flo
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::displayTransform(int x, int y, int hotX, int hotY, Rect32 rect, float zoomX, float zoomY, uint32 alpha, float rotate, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY) {
-	_rotation = rotate;
+	_rotation = (uint32)rotate;
+	if (rotate < 0.0f) {
+		warning("Negative rotation: %f %d", rotate, _rotation);
+		_rotation = (uint32)(360.0f + rotate);
+		warning("Negative post rotation: %f %d", rotate, _rotation);
+	}
 	return drawSprite(x, y, &rect, zoomX, zoomY, alpha, false, blendMode, mirrorX, mirrorY);
 }
 

@@ -32,18 +32,20 @@
 
 namespace Wintermute {
 
-RenderTicket::RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, float rotation, bool disableAlpha) :
+RenderTicket::RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, uint32 rotation, bool disableAlpha) :
 	_owner(owner),
 	_srcRect(*srcRect),
 	_dstRect(*dstRect),
 	_drawNum(0),
 	_isValid(true),
 	_wantsDraw(true),
-	_rotation(rotation),
 	_hasAlpha(!disableAlpha) {
+
+	_rotation = rotation;
 
 	_colorMod = 0;
 	_batchNum = 0;
+
 	_mirror = TransparentSurface::FLIP_NONE;
 	if (mirrorX) {
 		_mirror |= TransparentSurface::FLIP_V;
@@ -67,11 +69,23 @@ RenderTicket::RenderTicket(BaseSurfaceOSystem *owner, const Graphics::Surface *s
 			delete _surface;
 			_surface = temp;
 		}
-		if (_rotation) {
-			warning("TODO: Rotate surface %f", _rotation);
+		if (_rotation != 0) {
+			TransparentSurface src(*_surface, false);
+			Graphics::Surface *temp = src.rotate(_rotation);
+			_surface->free();
+			delete _surface;
+			_surface = temp;
+			_dstRect.setWidth(_surface->w);
+			_dstRect.setHeight(_surface->h);
 		}
 	} else {
 		_surface = nullptr;
+		if (rotation != 0) { // Make sure comparison-tickets get the correct width
+			int32 newWidth, newHeight;
+			TransparentSurface::getRotatedSize(_dstRect.width(), _dstRect.height(), _rotation, newWidth, newHeight);
+			_dstRect.setWidth(newWidth);
+			_dstRect.setHeight(newHeight);
+		}
 	}
 }
 
@@ -82,21 +96,22 @@ RenderTicket::~RenderTicket() {
 	}
 }
 
-bool RenderTicket::operator==(RenderTicket &t) {
+bool RenderTicket::operator==(const RenderTicket &t) const {
 	if ((t._owner != _owner) ||
 		(t._batchNum != t._batchNum) ||
 		(t._hasAlpha != _hasAlpha) ||
 		(t._mirror != _mirror) ||
 		(t._colorMod != _colorMod) ||
 		(t._dstRect != _dstRect) ||
-		(t._srcRect != _srcRect)) {
+		(t._srcRect != _srcRect) ||
+		(t._rotation != _rotation)) {
 		return false;
 	}
 	return true;
 }
 
 // Replacement for SDL2's SDL_RenderCopy
-void RenderTicket::drawToSurface(Graphics::Surface *_targetSurface) {
+void RenderTicket::drawToSurface(Graphics::Surface *_targetSurface) const {
 	TransparentSurface src(*getSurface(), false);
 
 	Common::Rect clipRect;
@@ -107,7 +122,7 @@ void RenderTicket::drawToSurface(Graphics::Surface *_targetSurface) {
 	src.blit(*_targetSurface, _dstRect.left, _dstRect.top, _mirror, &clipRect, _colorMod, clipRect.width(), clipRect.height());
 }
 
-void RenderTicket::drawToSurface(Graphics::Surface *_targetSurface, Common::Rect *dstRect, Common::Rect *clipRect) {
+void RenderTicket::drawToSurface(Graphics::Surface *_targetSurface, Common::Rect *dstRect, Common::Rect *clipRect) const {
 	TransparentSurface src(*getSurface(), false);
 	bool doDelete = false;
 	if (!clipRect) {

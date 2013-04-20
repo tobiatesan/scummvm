@@ -23,9 +23,11 @@
 #include "common/endian.h"
 #include "common/util.h"
 #include "common/rect.h"
+#include "common/math.h"
 #include "common/textconsole.h"
 #include "graphics/primitives.h"
 #include "engines/wintermute/graphics/transparent_surface.h"
+#include "engines/wintermute/graphics/SDL_rotozoom.h"
 
 namespace Wintermute {
 
@@ -380,6 +382,34 @@ Common::Rect TransparentSurface::blit(Graphics::Surface &target, int posX, int p
 	retSize.setWidth(img->w);
 	retSize.setHeight(img->h);
 	return retSize;
+}
+/*
+// http://en.wikipedia.org/wiki/Rotation_matrix
+void rotateByMatrix(int16 &x, int16 &y, float *matrix) {
+	float finalX = matrix[0] * x + matrix[1] * y;
+	float finalY = -matrix[1] * x + matrix[0] * y;
+	x = finalX;
+	y = finalY;
+}
+
+void rotateByMatrix(Common::Point &p, float *matrix) {
+	rotateByMatrix(p.x, p.y, matrix);
+}*/
+
+TransparentSurface *TransparentSurface::rotate(uint32 degrees) const {
+	degrees = degrees % 360;
+	if (degrees == 0) {
+		return new TransparentSurface(*this, true);
+	}
+	// HACK TO TEST, LEAKS A LOT
+	TransparentSurface src(*this, true);
+	TransparentSurface *ret = new TransparentSurface(*RotoZoom::rotozoomSurface(&src, degrees, 1.0, true), false);
+	src.free();
+	return ret;
+}
+
+void TransparentSurface::getRotatedSize(int32 oldWidth, int32 oldHeight, uint32 degrees, int32 &width, int32 &height) {
+	RotoZoom::rotozoomSurfaceSize(oldWidth, oldHeight, degrees, 1.0, &width, &height);
 }
 
 TransparentSurface *TransparentSurface::scale(uint16 newWidth, uint16 newHeight) const {

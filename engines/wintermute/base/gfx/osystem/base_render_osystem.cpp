@@ -276,7 +276,7 @@ Graphics::PixelFormat BaseRenderOSystem::getPixelFormat() const {
 	return _renderSurface->format;
 }
 
-void BaseRenderOSystem::drawSurface(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, float rotation, bool disableAlpha) {
+void BaseRenderOSystem::drawSurface(BaseSurfaceOSystem *owner, const Graphics::Surface *surf, Common::Rect *srcRect, Common::Rect *dstRect, bool mirrorX, bool mirrorY, uint32 rotation, bool disableAlpha) {
 	// Start searching from the beginning for the first and second items (since it's empty the first time around
 	// then keep incrementing the start-position, to avoid comparing against already used tickets.
 	if (_drawNum == 0 || _drawNum == 1) {
