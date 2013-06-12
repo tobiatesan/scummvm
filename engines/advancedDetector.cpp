@@ -266,7 +266,10 @@ Common::Error AdvancedMetaEngine::createInstance(OSystem *syst, Engine **engine)
 
 	if (agdDesc == 0) {
 		// Use fallback detector if there were no matches by other means
-		agdDesc = fallbackDetect(allFiles, files);
+		Common::FSList empty_fslist; 
+		// We don't need to pass the same files twice, once in the FileMap, once in 
+		// an FSList, otherwise we get warnings.
+		agdDesc = fallbackDetect(allFiles, empty_fslist);
 		if (agdDesc != 0) {
 			// Seems we found a fallback match. But first perform a basic
 			// sanity check: the gameid must match.
