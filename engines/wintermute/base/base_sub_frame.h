@@ -29,9 +29,9 @@
 #ifndef WINTERMUTE_BASE_SUBFRAME_H
 #define WINTERMUTE_BASE_SUBFRAME_H
 
-
 #include "engines/wintermute/base/base.h"
 #include "engines/wintermute/base/base_scriptable.h"
+#include "engines/wintermute/math/offset_tools.h"
 
 namespace Wintermute {
 class BaseObject;

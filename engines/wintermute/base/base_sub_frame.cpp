@@ -254,19 +254,54 @@ bool BaseSubFrame::draw(int x, int y, BaseObject *registerOwner, float zoomX, fl
 		alpha = _alpha;
 	}
 
+	
+	/* 
+	   We need some offsets now. The new origin is: old origin + box_offset + hotspot offset.
+	
+	   box_offset is the offset caused by the origin being shifted further down and right 
+	   during rotation, independently of the centre of rotation.
+	   If the sprite could extend to negative coordinates, this wouldn't be needed.
+
+	   hotspot_offset keeps the rotation centered around the hotspot, i.e. the hotspot
+	   stays at the same coordinates.
+    */
+
+	Common::Point box_offset, rotated_hotspot, hotspot_offset, new_origin;
+	Common::Point hotspot(_hotspotX, _hotspotY);
+	Common::Point origin(x,y);	
+	
+	/*
+	 * Where does the hotspot end up? We subtract this to make the sprite 
+	 * appear to turn around the hotspot
+	 */
+	rotated_hotspot = OffsetTools::rotate_point(hotspot, rotate); 
+
+	/* 
+	 * Now we compensate for zoom 
+	 */
+ 	hotspot_offset.x = rotated_hotspot.x * zoomX / 100;
+	hotspot_offset.y = rotated_hotspot.y * zoomX / 100;
+
+	/*
+	 * We compute the offset due to the padding
+	 */
+	box_offset = OffsetTools::compute_box_offset(getRect(), rotate, zoomX, zoomY); 
+
+	/* It all comes together: */
+	new_origin = origin - hotspot_offset  + box_offset;
+
 	if (rotate != 0.0f) {
-		res = _surface->displayTransform((int)(x - _hotspotX * (zoomX / 100)), (int)(y - _hotspotY * (zoomY / 100)), _hotspotX, _hotspotY, getRect(), zoomX, zoomY, alpha, rotate, blendMode, _mirrorX, _mirrorY);
+		res = _surface->displayTransform(new_origin.x, new_origin.y, _hotspotX, _hotspotY, getRect(), zoomX, zoomY, alpha, rotate, blendMode, _mirrorX, _mirrorY);
 	} else {
 		if (zoomX == 100 && zoomY == 100) {
-			res = _surface->displayTrans(x - _hotspotX, y - _hotspotY, getRect(), alpha, blendMode, _mirrorX, _mirrorY);
+			res = _surface->displayTrans(new_origin.x, new_origin.y, getRect(), alpha, blendMode, _mirrorX, _mirrorY);
 		} else {
-			res = _surface->displayTransZoom((int)(x - _hotspotX * (zoomX / 100)), (int)(y - _hotspotY * (zoomY / 100)), getRect(), zoomX, zoomY, alpha, blendMode, _mirrorX, _mirrorY);
+			 res = _surface->displayTransZoom(new_origin.x, new_origin.y, getRect(), zoomX, zoomY, alpha, blendMode, _mirrorX, _mirrorY);
 		}
 	}
-
+	
 	return res;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSubFrame::getBoundingRect(Rect32 *rect, int x, int y, float scaleX, float scaleY) {

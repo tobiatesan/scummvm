@@ -319,28 +319,33 @@ bool BaseSurfaceOSystem::endPixelOp() {
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::display(int x, int y, Rect32 rect, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY) {
+	_rotation = 0;
 	return drawSprite(x, y, &rect, 100, 100, 0xFFFFFFFF, true, blendMode, mirrorX, mirrorY);
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::displayTrans(int x, int y, Rect32 rect, uint32 alpha, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY) {
+	_rotation = 0;
 	return drawSprite(x, y, &rect, 100, 100, alpha, false, blendMode, mirrorX, mirrorY);
 }
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::displayTransOffset(int x, int y, Rect32 rect, uint32 alpha, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY, int offsetX, int offsetY) {
+	_rotation = 0;
 	return drawSprite(x, y, &rect, 100, 100, alpha, false, blendMode, mirrorX, mirrorY, offsetX, offsetY);
 }
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::displayTransZoom(int x, int y, Rect32 rect, float zoomX, float zoomY, uint32 alpha, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY) {
+	_rotation = 0;
 	return drawSprite(x, y, &rect, zoomX, zoomY, alpha, false, blendMode, mirrorX, mirrorY);
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 bool BaseSurfaceOSystem::displayZoom(int x, int y, Rect32 rect, float zoomX, float zoomY, uint32 alpha, bool transparent, TSpriteBlendMode blendMode, bool mirrorX, bool mirrorY) {
+	_rotation = 0;
 	return drawSprite(x, y, &rect, zoomX, zoomY, alpha, !transparent, blendMode, mirrorX, mirrorY);
 }
 
