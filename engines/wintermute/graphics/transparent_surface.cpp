@@ -401,10 +401,11 @@ TransparentSurface *TransparentSurface::rotate(uint32 degrees) const {
 	if (degrees == 0) {
 		return new TransparentSurface(*this, true);
 	}
-	// HACK TO TEST, LEAKS A LOT
 	TransparentSurface src(*this, true);
-	TransparentSurface *ret = new TransparentSurface(*RotoZoom::rotozoomSurface(&src, degrees, 1.0, true), false);
+	Graphics::Surface *dst = RotoZoom::rotozoomSurface(&src, degrees, 1.0, true);
+	TransparentSurface *ret = new TransparentSurface(*dst, false);
 	src.free();
+	delete dst;
 	return ret;
 }
 
