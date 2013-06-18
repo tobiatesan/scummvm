@@ -418,6 +418,9 @@ bool BaseSprite::getCurrentFrame(float zoomX, float zoomY) {
 
 //////////////////////////////////////////////////////////////////////
 bool BaseSprite::display(int x, int y, BaseObject *registerVal, float zoomX, float zoomY, uint32 alpha, float rotate, TSpriteBlendMode blendMode) {
+	// In WME rotation is defined as CW
+	rotate = fmod ((360.0f - rotate), 360.0f);
+
 	if (_currentFrame < 0 || _currentFrame >= (int32)_frames.size()) {
 		return STATUS_OK;
 	}
