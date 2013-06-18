@@ -25,7 +25,7 @@
 #include <math.h>
 
 namespace Wintermute {
-	Common::Point OffsetTools::rotate_point(Common::Point point, float rotate) {
+	Common::Point OffsetTools::rotatePoint(Common::Point point, float rotate) {
 		/* 
 		 * Returns the coordinates for a point after rotation 
 		 */
@@ -35,12 +35,14 @@ namespace Wintermute {
 		newpoint.x = point.x * cos(rotate_rad) - flipY * sin(rotate_rad);
 		newpoint.y = point.x * sin(rotate_rad) + flipY * cos(rotate_rad);
 		newpoint.y = -newpoint.y;
-		/* I apply the textbook formula, but first I reverse the Y-axis, otherwise
-		   I'd be performing a rotation in the wrong direction */
+		/*
+		 * I apply the textbook formula, but first I reverse the Y-axis, otherwise
+		 * I'd be performing a rotation in the wrong direction 
+		 */
 		return newpoint;
 	};
 
-	Common::Point OffsetTools::compute_box_offset(Rect32 rect, float rotate, float zoomX, float zoomY) {
+	Common::Point OffsetTools::computeBoxOffset(Rect32 rect, float rotate, float zoomX, float zoomY) {
 		/* 
 		 * Computes the coordinates for the origin of a sprite (=NW corner) after 
 		 * rotation.
@@ -48,35 +50,39 @@ namespace Wintermute {
 		 * because of the "padding" introducted by the rotation, since we can't have
 		 * points with negative coordinates.
 		 */
-		Common::Point ne (rect.right, 0);
-		Common::Point se (rect.right, rect.bottom);
-		Common::Point sw (0, rect.bottom);
+		Common::Point ne(rect.right, 0);
+		Common::Point se(rect.right, rect.bottom);
+		Common::Point sw(0, rect.bottom);
 		Common::Point offset;
-
+		/*
+		 * Normalize so that 0<=rotate<360
+		 */
+		if (rotate >= 360.0f) rotate = fmod(rotate, 360.0f);
 		/*
 		 * In each quadrant of the unit circle a different corner is "pushing"
 		 * the boundaries of the sprite; I work on a per-case basis.
 		 */
 		if (0 <= rotate && rotate < 90) {
 			offset.x = 0;
-			offset.y = rotate_point (ne, rotate).y;
+			offset.y = rotatePoint (ne, rotate).y;
 		}
 
 		if (90 <= rotate && rotate < 180) {
-			offset.x = rotate_point(ne, rotate).x;
-			offset.y = rotate_point(se, rotate).y;
+			offset.x = rotatePoint(ne, rotate).x;
+			offset.y = rotatePoint(se, rotate).y;
 		}
 		if (180 <= rotate && rotate < 270) {
-			offset.x = rotate_point(se, rotate).x;
-			offset.y = rotate_point(sw, rotate).y;
+			offset.x = rotatePoint(se, rotate).x;
+			offset.y = rotatePoint(sw, rotate).y;
 		}
 		if (270 <= rotate && rotate < 360){
-			offset.x = rotate_point(sw, rotate).x;
+			offset.x = rotatePoint(sw, rotate).x;
 			offset.y = 0;
 		}
 
-		// I then "stretch" for zoom
-
+		/*
+		 * I then "stretch" for zoom
+		 */
 		offset.x = offset.x * zoomX / 100;
 		offset.y = offset.y * zoomY / 100;
 		

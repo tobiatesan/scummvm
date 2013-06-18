@@ -29,11 +29,11 @@
 #include "engines/wintermute/math/rect32.h"
 
 namespace Wintermute {
-	class OffsetTools {
-		public:
-			static Common::Point rotate_point(Common::Point point, float rotate);
-			static Common::Point compute_box_offset(Rect32 rect, float rotate, float zoomX, float zoomY);
-	};
+class OffsetTools {
+public:
+	static Common::Point rotatePoint(Common::Point point, float rotate);
+	static Common::Point computeBoxOffset(Rect32 rect, float rotate, float zoomX, float zoomY);
+};
 } // end of namespace Wintermute
 #endif
 
