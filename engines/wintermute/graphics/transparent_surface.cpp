@@ -202,6 +202,11 @@ void TransparentSurface::doBlitAlpha(byte *ino, byte *outo, uint32 width, uint32
 	const int bShiftTarget = 0;//target.format.bShift;
 	const int gShiftTarget = 8;//target.format.gShift;
 	const int rShiftTarget = 16;//target.format.rShift;
+	const int aShiftTarget = 24;//target.format.aShift;
+
+	/*
+	 * Blending modes use http://wiki.libsdl.org/SDL_BlendMode for reference
+	 */
 
 	for (uint32 i = 0; i < height; i++) {
 		out = outo;
@@ -233,21 +238,44 @@ void TransparentSurface::doBlitAlpha(byte *ino, byte *outo, uint32 width, uint32
 					out += 4;
 					break;
 
-				default: // alpha blending
-					// TODO: turn special case into something more fleshed out
+				default: 
 					if (blendMode == BLEND_ADDITIVE) {
-						outa = a;
-						outb = ((b * 255) + ((oPix >> bShiftTarget) & 0xff) * (255-a)) >> 8;
-						outg = ((g * 255) + ((oPix >> gShiftTarget) & 0xff) * (255-a)) >> 8;
-						outr = ((r * 255) + ((oPix >> rShiftTarget) & 0xff) * (255-a)) >> 8;
+						
+						// Emulates SDL_BLENDMODE_ADD
+						
+						outa = ((oPix >> aShiftTarget) & 0xff);
+						outb = ((b * a) + ((oPix >> bShiftTarget) & 0xff) * (255 - a)) >> 8;
+						outg = ((g * a) + ((oPix >> gShiftTarget) & 0xff) * (255 - a)) >> 8;
+						outr = ((r * a) + ((oPix >> rShiftTarget) & 0xff) * (255 - a)) >> 8;
 
 						out[aIndex] = outa;
 						out[bIndex] = outb;
 						out[gIndex] = outg;
 						out[rIndex] = outr;
 						out += 4;
+
+					} else if (blendMode == BLEND_SUBTRACTIVE)  {
+				
+						// Emulates SDL_BLENDMODE_ADD, but srcARGB * -1
+						
+						outa = ((oPix >> aShiftTarget) & 0xff);
+						outb = ((-1 * b * a) + ((oPix >> bShiftTarget) & 0xff) * (255 - a)) >> 8;
+						outg = ((-1 * g * a) + ((oPix >> gShiftTarget) & 0xff) * (255 - a)) >> 8;
+						outr = ((-1 * r * a) + ((oPix >> rShiftTarget) & 0xff) * (255 - a)) >> 8;
+
+						out[aIndex] = outa;
+						out[bIndex] = MAX(0, outb);
+						out[gIndex] = MAX(0, outg);
+						out[rIndex] = MAX(0, outr);
+						out += 4;
+
 					} else {
-						outa = 255;
+
+						assert (blendMode == BLEND_NORMAL);
+
+						// Emulates SDL_BLENDMODE_BLEND
+
+						outa = (a + ((oPix >> bShiftTarget) & 0xff) * (255-a)) >> 8;
 						outb = ((b * a) + ((oPix >> bShiftTarget) & 0xff) * (255-a)) >> 8;
 						outg = ((g * a) + ((oPix >> gShiftTarget) & 0xff) * (255-a)) >> 8;
 						outr = ((r * a) + ((oPix >> rShiftTarget) & 0xff) * (255-a)) >> 8;
