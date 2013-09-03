@@ -275,7 +275,7 @@ void TransparentSurface::doBlitAlpha(byte *ino, byte *outo, uint32 width, uint32
 
 						// Emulates SDL_BLENDMODE_BLEND
 
-						outa = (a + ((oPix >> bShiftTarget) & 0xff) * (255-a)) >> 8;
+						outa = (a + ((oPix >> aShiftTarget) & 0xff) * (255-a)) >> 8;
 						outb = ((b * a) + ((oPix >> bShiftTarget) & 0xff) * (255-a)) >> 8;
 						outg = ((g * a) + ((oPix >> gShiftTarget) & 0xff) * (255-a)) >> 8;
 						outr = ((r * a) + ((oPix >> rShiftTarget) & 0xff) * (255-a)) >> 8;
