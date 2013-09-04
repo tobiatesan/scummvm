@@ -427,6 +427,7 @@ Common::Rect TransparentSurface::blit(Graphics::Surface &target, int posX, int p
 		const int bShiftTarget = 0;//target.format.bShift;
 		const int gShiftTarget = 8;//target.format.gShift;
 		const int rShiftTarget = 16;//target.format.rShift;
+		const int aShiftTarget = 24;
 
 		if (ca == 255 && cb == 255 && cg == 255 && cr == 255) {
 			if (_enableAlphaBlit) {
@@ -480,33 +481,77 @@ Common::Rect TransparentSurface::blit(Graphics::Surface &target, int posX, int p
 						break;
 
 					default: // alpha blending
-						outa = 255;
-						outb = (o_pix >> bShiftTarget) & 0xff;
-						outg = (o_pix >> gShiftTarget) & 0xff;
-						outr = (o_pix >> rShiftTarget) & 0xff;
-						if (cb == 0)
-							outb = 0;
-						else if (cb != 255)
-							outb += ((b - outb) * a * cb) >> 16;
-						else
-							outb += ((b - outb) * a) >> 8;
-						if (cg == 0)
-							outg = 0;
-						else if (cg != 255)
-							outg += ((g - outg) * a * cg) >> 16;
-						else
-							outg += ((g - outg) * a) >> 8;
-						if (cr == 0)
-							outr = 0;
-						else if (cr != 255)
-							outr += ((r - outr) * a * cr) >> 16;
-						else
-							outr += ((r - outr) * a) >> 8;
-						out[aIndex] = outa;
-						out[bIndex] = outb;
-						out[gIndex] = outg;
-						out[rIndex] = outr;
-						out += 4;
+						if (blendMode == BLEND_ADDITIVE) {
+							// Emulates SDL_BLENDMODE_ADD
+						
+							outa = ((o_pix >> aShiftTarget) & 0xff);
+							outb = ((b * a) + ((o_pix >> bShiftTarget) & 0xff) * (255 - a)) >> 8;
+							outg = ((g * a) + ((o_pix >> gShiftTarget) & 0xff) * (255 - a)) >> 8;
+							outr = ((r * a) + ((o_pix >> rShiftTarget) & 0xff) * (255 - a)) >> 8;
+
+							// Colorize
+
+							outr = outr * cr >> 8;
+							outg = outg * cr >> 8;
+							outb = outb * cr >> 8;
+							
+							out[aIndex] = outa;
+							out[bIndex] = outb;
+							out[gIndex] = outg;
+							out[rIndex] = outr;
+
+							out += 4;	
+
+						} else if (blendMode == BLEND_SUBTRACTIVE) {
+							// Emulates SDL_BLENDMODE_ADD, but srcARGB * -1
+						
+							outa = ((o_pix >> aShiftTarget) & 0xff);
+							outb = ((-1 * b * a) + ((o_pix >> bShiftTarget) & 0xff) * (255 - a)) >> 8;
+							outg = ((-1 * g * a) + ((o_pix >> gShiftTarget) & 0xff) * (255 - a)) >> 8;
+							outr = ((-1 * r * a) + ((o_pix >> rShiftTarget) & 0xff) * (255 - a)) >> 8;
+
+							// Colorize
+
+							outr = outr * cr >> 8;
+							outg = outg * cr >> 8;
+							outb = outb * cr >> 8;
+
+							out[aIndex] = outa;
+							out[bIndex] = MAX(0, outb);
+							out[gIndex] = MAX(0, outg);
+							out[rIndex] = MAX(0, outr);
+							out += 4;
+
+						} else {
+							assert (blendMode == BLEND_NORMAL);
+							outa = a;
+							outb = (o_pix >> bShiftTarget) & 0xff;
+							outg = (o_pix >> gShiftTarget) & 0xff;
+							outr = (o_pix >> rShiftTarget) & 0xff;
+							if (cb == 0)
+								outb = 0;
+							else if (cb != 255)
+								outb += ((b - outb) * a * cb) >> 16;
+							else
+								outb += ((b - outb) * a) >> 8;
+							if (cg == 0)
+								outg = 0;
+							else if (cg != 255)
+								outg += ((g - outg) * a * cg) >> 16;
+							else
+								outg += ((g - outg) * a) >> 8;
+							if (cr == 0)
+								outr = 0;
+							else if (cr != 255)
+								outr += ((r - outr) * a * cr) >> 16;
+							else
+								outr += ((r - outr) * a) >> 8;
+							out[aIndex] = outa;
+							out[bIndex] = outb;
+							out[gIndex] = outg;
+							out[rIndex] = outr;
+							out += 4;
+						}
 					}
 				}
 				outo += target.pitch;
