@@ -492,8 +492,8 @@ Common::Rect TransparentSurface::blit(Graphics::Surface &target, int posX, int p
 							// Colorize
 
 							outr = outr * cr >> 8;
-							outg = outg * cr >> 8;
-							outb = outb * cr >> 8;
+							outg = outg * cg >> 8;
+							outb = outb * cb >> 8;
 							
 							out[aIndex] = outa;
 							out[bIndex] = outb;
@@ -513,8 +513,8 @@ Common::Rect TransparentSurface::blit(Graphics::Surface &target, int posX, int p
 							// Colorize
 
 							outr = outr * cr >> 8;
-							outg = outg * cr >> 8;
-							outb = outb * cr >> 8;
+							outg = outg * cg >> 8;
+							outb = outb * cb >> 8;
 
 							out[aIndex] = outa;
 							out[bIndex] = MAX(0, outb);
