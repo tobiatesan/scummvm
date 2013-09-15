@@ -379,4 +379,10 @@ bool WintermuteEngine::getGameInfo(const Common::FSList &fslist, Common::String 
 	return retVal;
 }
 
+BaseGame* WintermuteEngine::getGame() {
+	return _game;
+}
+
+
+
 } // End of namespace Wintermute

@@ -31,8 +31,8 @@
 #include "engines/wintermute/base/scriptables/script_stack.h"
 #include "common/tokenizer.h"
 #include <limits.h>
-#define SCENGINE _engine->_game->_scEngine
-#define DEBUGGER _engine->_debugger
+#define SCENGINE _engine->getGame()->_scEngine
+#define DEBUGGER _engine->getConsole()
 #define DBG_PATH "dbg"
 
 namespace Wintermute {
@@ -482,7 +482,7 @@ int DebuggerAdapter::setValue(Common::String name, Common::String value, ScValue
 }
 
 void DebuggerAdapter::showFps(bool show) {
-	_engine->_game->setShowFPS(show);
+	_engine->getGame()->setShowFPS(show);
 }
 
 BaseArray<BreakpointInfo> DebuggerAdapter::getBreakpoints() {
