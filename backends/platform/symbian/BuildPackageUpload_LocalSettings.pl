@@ -2,31 +2,32 @@
 ##################################################################################################################
 
 	@WorkingEngines = qw(
-		agos agi cine cge composer cruise draci
+		agos agi bbvs cine cge composer cruise draci
 		drascula hugo gob groovie kyra lastexpress
 		lure made mohawk parallaction pegasus queen
 		saga sci scumm sky sword1 sword2 teenagent tinsel
 		toltecs tony toon touche tsage tucker wintermute
-		dreamweb fullpipe hopkins mortevielle
-		neverhood testbed avalanche zvision
+		dreamweb fullpipe hopkins mortevielle mads
+		neverhood testbed avalanche zvision voyeur
 	);
 #### New engines
 ####		sword25
 
 	@WorkingEngines_1st = qw(
-		cine composer cruise drascula groovie
-		lastexpress made parallaction queen
-		saga scumm touche tucker wintermute
-		avalanche zvision
+		bbvs cine composer cruise 
+		drascula groovie lastexpress
+		lure made mohawk parallaction pegasus queen
+		saga scumm 
+		toltecs tony toon touche tucker wintermute
+		neverhood avalanche zvision voyeur
 	);
 
 	@WorkingEngines_2nd = qw(
-		agi agos cge draci gob hopkins
-		hugo kyra lure mohawk pegasus sci
-		sky sword1 sword2 teenagent
-		tinsel tsage toltecs tony toon
-		dreamweb fullpipe mortevielle
-		neverhood testbed
+		agos agi cge draci
+		hugo gob kyra
+		sci sky sword1 sword2 teenagent tinsel
+		tsage
+		dreamweb fullpipe hopkins mortevielle mads
 	);
 ####		sword25
 
@@ -55,20 +56,22 @@
 
 	# see configure.engines
 	%UseableFeatures = (
-		'zlib'		=> 'zlib.lib',
-		'mad'		=> 'libmad.lib',
-		'tremor'	=> 'libtremor.lib',
-		'flac'		=> 'libflacdec.lib',
 		'freetype2'		=> 'freetype.lib',
 		'faad'		=> 'libFAAD2.lib',
-		'mpeg2'	=>  'libmpeg2.lib'
+		'flac'		=> 'libflacdec.lib',
+		'jpeg'		=> 'libjpeg.lib',
+		'mad'		=> 'libmad.lib',
+		'mpeg2'		=> 'libmpeg2.lib',
+		'png'		=> 'libpng.lib',
+		'tremor'	=> 'libtremor.lib',
+		'theoradec' => 'theora.lib',
+		'zlib'		=> 'zlib.lib'
 	);
-		# 'mpeg2'	=>  'libmpeg2.lib'
 
 	# these are normally enabled for each variation
 	#$DefaultFeatures = qw(zlib,mad);
 	#$DefaultFeatures = qw(zlib,mad,tremor,);
-	$DefaultFeatures = qw(mad,tremor,faad,flac,freetype2,mpeg2,zlib,);
+	$DefaultFeatures = qw(faad,flac,freetype2,jpeg,mad,mpeg2,png,theoradec,tremor,zlib,);
 
 ##################################################################################################################
 	##
@@ -102,7 +105,7 @@
 	#	$SDK_RootDirs{'UIQ3'}	= "$DevBase\\UIQ3";
 	#	$SDK_RootDirs{'S60v1'}	= "$DevBase\\S60v1";
 	#	$SDK_RootDirs{'S60v2'}	= "$DevBase\\S60v2";
-		$SDK_RootDirs{'S60v3'}	= "$DevBase\\S60v3";
+		$SDK_RootDirs{'S60v3'}	= "$DevBase\\S60v5";
 	#	$SDK_RootDirs{'S80'}	= "$DevBase\\S80";
 	#	$SDK_RootDirs{'S90'}	= "$DevBase\\S90";
 
@@ -123,7 +126,7 @@
 			my $SdlBase = "$DevBase\\SDL-1.2.12-ag\\Symbian";
 			#$SDK_LibraryDirs{'S60v1'}{'esdl.lib'}	= "$SdlBase\\S60"; // unsupported?
 			#$SDK_LibraryDirs{'S60v2'}{'esdl.lib'}	= "$SdlBase\\S60v2";
-			$SDK_LibraryDirs{'S60v3'}{'esdl.lib'}	= "$SdlBase\\S60v3";
+			$SDK_LibraryDirs{'S60v3'}{'esdl.lib'}	= "$SdlBase\\S60v5";
 			#$SDK_LibraryDirs{'S80'}{'esdl.lib'}	= "$SdlBase\\S80";
 			#$SDK_LibraryDirs{'S90'}{'esdl.lib'}	= "$SdlBase\\S90";
 			#$SDK_LibraryDirs{'UIQ2'}{'esdl.lib'}	= "$SdlBase\\UIQ2"
@@ -225,7 +228,7 @@
 		$SDK_RootDirs{'UIQ3'}= "G:\\UIQ3";
 		#$SDK_RootDirs{'S60v1'}= "D:\\S60v1";
 		#$SDK_RootDirs{'S60v2'}= "D:\\S60v2";
-		$SDK_RootDirs{'S60v3'}= "G:\\S60v3";
+		$SDK_RootDirs{'S60v3'}= "G:\\S60v5";
 		#$SDK_RootDirs{'S80'}= "D:\\S80";
 		#$SDK_RootDirs{'S90'}= "D:\\S90";
 		#$ECompXL_BinDir= "D:\\ECompXL\\";
@@ -245,14 +248,14 @@
 		# now you can add $VariationSets only built on this PC below this line :)
 
 	}
-	elsif ($ENV{'COMPUTERNAME'} eq "PC-FOREVER1111") #################################################################
+	elsif ($ENV{'COMPUTERNAME'} eq "FEDOR4EVER") #################################################################
 	{
 		$Producer = "Fedor";
 		$RedirectSTDERR = 1;
 		$HaltOnError = 0;
 		$SkipExistingPackages = 0;
 		$ReallyQuiet = 0;
-		$Compiler = "D:\\Program/ Files\\CodeSourcery\\Sourcery/ G++ Lite";
+		$Compiler = "D:\\Program/ Files\\CodeSourcery\\Sourcery/ G++/ Lite";
 
 		#$FTP_Host = "host.com";
 		#$FTP_User = "ag@host.com";
@@ -324,6 +327,7 @@
 		# the first one includes all SDKs & release-ready engines
 
 			$VariationSets{'ALL'}{'all'} = "$DefaultFeatures @WorkingEngines @EnablableSubEngines";
+			#$VariationSets{'ALL'}{'split'} = "$DefaultFeatures @WorkingEngines @EnablableSubEngines";
 			# $VariationSets{'ALL'}{'1St'} = "$DefaultFeatures @WorkingEngines_1st @EnablableSubEngines";
 			# $VariationSets{'ALL'}{'2nd'} = "$DefaultFeatures @WorkingEngines_2nd @EnablableSubEngines";
 		# now one for each ready-for-release engine

@@ -95,7 +95,7 @@ ShootEmUp::ShootEmUp(AvalancheEngine *vm) {
 	_gotOut = false;
 }
 
-void ShootEmUp::run() {
+uint16 ShootEmUp::run() {
 	CursorMan.showMouse(false);
 	_vm->_graphics->saveScreen();
 	_vm->fadeOut();
@@ -116,7 +116,7 @@ void ShootEmUp::run() {
 	}
 
 	setup();
-	
+
 	while ((_time != 0) && (!_vm->shouldQuit())) {
 		uint32 beginLoop = _vm->_system->getMillis();
 
@@ -148,6 +148,8 @@ void ShootEmUp::run() {
 	_vm->_graphics->removeBackup();
 	_vm->fadeIn();
 	CursorMan.showMouse(true);
+
+	return _score;
 }
 
 bool ShootEmUp::overlap(uint16 a1x, uint16 a1y, uint16 a2x, uint16 a2y, uint16 b1x, uint16 b1y, uint16 b2x, uint16 b2y) {
