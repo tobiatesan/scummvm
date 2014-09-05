@@ -68,8 +68,10 @@ void DirtyRectContainer::addDirtyRect(const Common::Rect &rect, const Common::Re
 		// but there is a possibility of being flooded with rects.
 		// At which point, we bail out.
 		// This is, basically, the 'unrealistic' case, something went wrong.
-		_tempDisableDRects = true;
-		warning("Too many input rects: %d disabling dirty rects for this frame.", _rectArray.size());
+		if (!_tempDisableDRects) {
+			_tempDisableDRects = true;
+			warning("Too many input rects: %d disabling dirty rects for this frame.", _rectArray.size());
+		}
 	} else {
 		Common::Rect *tmp = new Common::Rect(rect);
 		tmp->clip(clipRect);
