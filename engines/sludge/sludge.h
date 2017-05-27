@@ -39,6 +39,8 @@ struct SludgeGameDescription;
 enum {
 	kSludgeDebugScript = 1 << 0,
 	kSludgeDebugDataLoad = 1 << 1,
+	kSludgeDebugStackMachine = 1 << 2,
+	kSludgeDebugBuiltin = 1 << 3,
 };
 
 class SludgeEngine : public Engine {
