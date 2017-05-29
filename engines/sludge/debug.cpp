@@ -36,7 +36,7 @@ void debugOut(const char *a, ...) {
 	va_list argptr;
 	va_start(argptr, a);
 
-#if ALLOW_FILE
+#if 0
 #if defined __unix__ && !(defined __APPLE__)
 	vfprintf(stderr, a, argptr);
 #else

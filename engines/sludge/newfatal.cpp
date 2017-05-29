@@ -26,14 +26,12 @@
 #include <stdlib.h>
 #endif
 
-#include "common/debug.h"
-
-#include "platform-dependent.h"
 #include "allfiles.h"
+
+#include "common/debug.h"
+#include "platform-dependent.h"
 #include "CommonCode/version.h"
-
 #include "sound.h"
-
 #include "stringy.h"
 #include "errors.h"
 #include "graphics.h"
@@ -87,7 +85,7 @@ extern SDL_Event quit_event;
 #endif
 
 int inFatal(const char *str) {
-#if ALLOW_FILE
+#if 0
 	FILE *fatFile = fopen("fatal.txt", "wt");
 	if (fatFile) {
 		fprintf(fatFile, "FATAL:\n%s\n", str);

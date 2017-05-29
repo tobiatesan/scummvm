@@ -27,8 +27,6 @@
 #endif
 #endif
 
-#include <string.h>
-
 #include "allfiles.h"
 
 #include "fileset.h"

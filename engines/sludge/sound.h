@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#include "variable.h"
+
 #ifndef SLUDGE_SOUND_H
 #define SLUDGE_SOUND_H
 
@@ -28,6 +28,8 @@
 #else
 #define HWND void *
 #endif
+
+#include "variable.h"
 
 namespace Sludge {
 
@@ -41,8 +43,6 @@ struct soundList {
 };
 soundList *deleteSoundFromList(soundList *s);
 void playSoundList(soundList *s);
-
-
 
 // GENERAL...
 bool initSoundStuff(HWND);

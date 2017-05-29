@@ -19,15 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#include <string.h>
-
 #include "debug.h"
 
 #include "allfiles.h"
-
 #include "variable.h"
 #include "newfatal.h"
-
 #include "stringy.h"
 #include "objtypes.h"
 #include "people.h"

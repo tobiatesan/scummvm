@@ -20,8 +20,6 @@
  *
  */
 #include <stdint.h>
-#include <string.h>
-
 #include "allfiles.h"
 #include "colours.h"
 #include "backdrop.h"
@@ -39,7 +37,6 @@ extern unsigned char brightnessLevel;
 extern float snapTexW, snapTexH;
 
 unsigned char fadeMode = 2;
-
 
 //----------------------------------------------------
 // PROPER BRIGHTNESS FADING

@@ -20,8 +20,6 @@
  *
  */
 #include "allfiles.h"
-#include <string.h>
-
 #include "newfatal.h"
 
 #ifndef SLUDGE_STRINGY_H
