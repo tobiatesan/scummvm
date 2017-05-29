@@ -58,6 +58,7 @@
 #include "common/debug.h"
 #include "image/png.h"
 #include "graphics/surface.h"
+#include "graphics/palette.h"
 #include "sludge.h"
 
 namespace Sludge {
@@ -1016,6 +1017,8 @@ bool loadPng(int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeigh
 	if (!png.loadStream(*stream))
 		return false;
 	backdropSurface.copyFrom(*(png.getSurface()));
+	const byte *palette = png.getPalette();
+	g_system->getPaletteManager()->setPalette(palette, 0, 256);
 	picWidth = realPicWidth = backdropSurface.w;
 	picHeight = realPicHeight = backdropSurface.h;
 	return true;
@@ -1133,10 +1136,15 @@ bool loadByteArray(int &picWidth, int &picHeight, int &realPicWidth, int &realPi
 #endif
 }
 
-bool loadImage(int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, int x, int y, bool reserve) {
-	debug(kSludgeDebugGraphics, "Loading back drop image.");
-	if (!loadPng(picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
-		if (!loadByteArray(picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
+bool loadImage(int &picWidth, int &picHeight, int &realPicWidth,
+               int &realPicHeight, Common::SeekableReadStream *stream, int x, int y,
+               bool reserve) {
+	debug(kSludgeDebugGraphics, "Loading back drop image at file position: %i", stream->pos());
+	if (!loadPng(picWidth, picHeight, realPicWidth, realPicHeight, stream,
+	             reserve)) {
+		if (!loadByteArray(picWidth, picHeight, realPicWidth, realPicHeight,
+		                   stream, reserve)) {
+			debug(kSludgeDebugGraphics, "Back drop loading failed");
 			return false;
 		}
 	}

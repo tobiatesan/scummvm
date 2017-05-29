@@ -75,6 +75,7 @@
 #include "graphics.h"
 #include "helpers.h"
 #include "graphics/surface.h"
+#include "common/debug.h"
 
 namespace Sludge {
 
@@ -475,6 +476,7 @@ try
 		sludgeDisplay();
 		g_system->copyRectToScreen(backdropSurface.getPixels(), backdropSurface.pitch, 0, 0, backdropSurface.w, backdropSurface.h);
 		g_system->updateScreen();
+		g_system->delayMillis(100);
 #if 0
 		Wait_Frame();
 #endif
