@@ -98,7 +98,7 @@ void nosnapshot() {
 #endif
 }
 
-#if ALLOW_FILE
+#if 0
 void saveSnapshot(FILE *fp) {
 	if (snapshotTextureName) {
 		fputc(1, fp);               // 1 for snapshot follows
@@ -159,7 +159,7 @@ bool snapshot() {
 	return true;
 }
 
-#if ALLOW_FILE
+#if 0
 bool restoreSnapshot(FILE *fp) {
 	unsigned int picWidth = get2bytes(fp);
 	unsigned int picHeight = get2bytes(fp);
@@ -306,7 +306,7 @@ bool resizeBackdrop(int x, int y) {
 
 void loadBackDrop(int fileNum, int x, int y) {
 	setResourceForFatal(fileNum);
-#if ALLOW_FILE
+#if 0
 	if (!openFileFromNum(fileNum)) {
 		fatal("Can't load overlay image");
 		return;
@@ -324,7 +324,7 @@ void loadBackDrop(int fileNum, int x, int y) {
 }
 
 void mixBackDrop(int fileNum, int x, int y) {
-#if ALLOW_FILE
+#if 0
 	setResourceForFatal(fileNum);
 	if (!openFileFromNum(fileNum)) {
 		fatal("Can't load overlay image");
@@ -625,7 +625,7 @@ void drawBackDrop() {
 
 bool loadLightMap(int v) {
 	int newPicWidth, newPicHeight;
-#if ALLOW_FILE
+#if 0
 	setResourceForFatal(v);
 	if (!openFileFromNum(v)) return fatal("Can't open light map.");
 	long file_pointer = ftell(bigDataFile);
@@ -766,9 +766,9 @@ bool loadLightMap(int v) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-#endif
-	texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, newPicWidth, newPicHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, lightMap.data, lightMap.name);
 
+	texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, newPicWidth, newPicHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, lightMap.data, lightMap.name);
+#endif
 	finishAccess();
 
 #endif
@@ -818,7 +818,7 @@ void reloadParallaxTextures() {
 
 bool loadParallax(unsigned short v, unsigned short fracX, unsigned short fracY) {
 
-#if ALLOW_FILE
+#if 0
 	setResourceForFatal(v);
 	if (!openFileFromNum(v)) return fatal("Can't open parallax image");
 
@@ -1006,7 +1006,7 @@ bool loadParallax(unsigned short v, unsigned short fracX, unsigned short fracY) 
 
 extern int viewportOffsetX, viewportOffsetY;
 
-#if ALLOW_FILE
+#if 0
 bool loadHSI(FILE *fp, int x, int y, bool reserve) {
 
 	int t1, t2, n;

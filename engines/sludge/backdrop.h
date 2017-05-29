@@ -67,7 +67,7 @@ void mixBackDrop(int fileNum, int x, int y);
 void drawBackDrop();
 void blankScreen(int x1, int y1, int x2, int y2);
 void darkScreen();
-#if ALLOW_FILE
+#if 0
 void saveHSI(FILE *writer);
 void saveCoreHSI(FILE *writer, GLuint texture, int w, int h);
 bool loadHSI(FILE *fp, int, int, bool);

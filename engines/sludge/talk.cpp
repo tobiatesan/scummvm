@@ -20,9 +20,6 @@
  *
  */
 #include "allfiles.h"
-
-#include <string.h>
-
 #include "backdrop.h"
 #include "sprites.h"
 #include "sludger.h"

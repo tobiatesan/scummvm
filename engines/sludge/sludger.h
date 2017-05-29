@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 
+#include "allfiles.h"
 #include "variable.h"
 #include "csludge.h"
 #include "language.h"
@@ -37,6 +38,8 @@ typedef struct _FILETIME {
 } FILETIME;
 #endif
 
+struct variable;
+struct variableStack;
 
 struct eventHandlers {
 	int leftMouseFunction;

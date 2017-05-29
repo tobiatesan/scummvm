@@ -20,8 +20,6 @@
  *
  */
 #include <stdint.h>
-#include <string.h>
-
 #include "allfiles.h"
 #include "colours.h"
 #include "backdrop.h"
