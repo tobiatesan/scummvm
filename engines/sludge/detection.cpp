@@ -51,6 +51,8 @@ Common::Language SludgeEngine::getLanguage() const {
 static const PlainGameDescriptor sludgeGames[] = {
 	{ "sludge", "Sludge Game" },
 	{ "welcome", "Welcome Example" },
+	{ "welcome2", "Welcome Example 2" },
+	{ "verbcoin", "Verb Coin" },
 	{ 0, 0 }
 };
 
@@ -61,6 +63,32 @@ static const SludgeGameDescription gameDescriptions[] = {
 			"welcome",
 			"",
 			AD_ENTRY1("Welcome.slg", "50445503761cf6684fe3270d0860a4c3"),
+			Common::EN_ANY,
+			Common::kPlatformUnknown,
+			ADGF_NO_FLAGS,
+			GUIO0()
+		},
+		0
+	},
+
+	{
+		{
+			"welcome2",
+			"",
+			AD_ENTRY1("Welcome.slg", "cb1f307c05b8ae4107bcc7f86a3d2f99"),
+			Common::EN_ANY,
+			Common::kPlatformUnknown,
+			ADGF_NO_FLAGS,
+			GUIO0()
+		},
+		0
+	},
+
+	{
+		{
+			"verbcoin",
+			"",
+			AD_ENTRY1("Welcome.slg", "e39ec315dcbf3a1137481f0a5fe1617d"),
 			Common::EN_ANY,
 			Common::kPlatformUnknown,
 			ADGF_NO_FLAGS,

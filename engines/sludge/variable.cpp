@@ -31,6 +31,9 @@
 #include "people.h"
 #include "fileset.h"
 
+#include "sludge.h"
+#include "common/debug.h"
+
 #include <dirent.h>
 #include "moreio.h"
 #ifdef _WIN32
@@ -327,9 +330,8 @@ void makeTextVar(variable &thisVar, const char *txt) {
 }
 
 bool loadStringToVar(variable &thisVar, int value) {
-#if ALLOW_FILE
+
 	makeTextVar(thisVar, getNumberedString(value));
-#endif
 	return (bool)(thisVar.varData.theString != NULL);
 }
 
@@ -538,7 +540,7 @@ bool addVarToStack(const variable &va, variableStack *&thisStack) {
 	if (! copyMain(va, newStack -> thisVar)) return false;
 	newStack -> next = thisStack;
 	thisStack = newStack;
-	//printf("Variable %s was added to stack\n", getTextFromAnyVar(va));
+	debug(kSludgeDebugStackMachine, "Variable %s was added to stack", getTextFromAnyVar(va));
 	return true;
 }
 
@@ -553,7 +555,7 @@ bool addVarToStackQuick(variable &va, variableStack *&thisStack) {
 
 	newStack -> next = thisStack;
 	thisStack = newStack;
-	//printf("Variable %s was added to stack quick\n", getTextFromAnyVar(va));
+	debug(kSludgeDebugStackMachine, "Variable %s was added to stack quick", getTextFromAnyVar(va));
 	return true;
 }
 
@@ -624,7 +626,7 @@ void trimStack(variableStack *&stack) {
 	variableStack *killMe = stack;
 	stack = stack -> next;
 
-	//printf("Variable %s was removed from stack\n", getTextFromAnyVar(killMe -> thisVar));
+	debug(kSludgeDebugStackMachine, "Variable %s was removed from stack", getTextFromAnyVar(killMe -> thisVar));
 
 	// When calling this, we've ALWAYS checked that stack != NULL
 	unlinkVar(killMe -> thisVar);
