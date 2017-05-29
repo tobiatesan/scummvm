@@ -1007,16 +1007,13 @@ bool loadParallax(unsigned short v, unsigned short fracX, unsigned short fracY) 
 
 extern int viewportOffsetX, viewportOffsetY;
 
-
-bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
 #if 0
+bool loadImage(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, int x, int y, bool reserve) {
+
 	int t1, t2, n;
 	unsigned short c;
 	GLubyte *target;
 	int32_t transCol = reserve ? -1 : 63519;
-	int picWidth;
-	int picHeight;
-	int realPicWidth, realPicHeight;
 	long file_pointer = stream->pos();
 
 	png_structp png_ptr;
@@ -1079,19 +1076,6 @@ bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
 
 		png_read_update_info(png_ptr, info_ptr);
 		png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, &compression_type, &filter_method);
-
-		//int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-
-	}
-
-
-	GLfloat texCoordW = 1.0;
-	GLfloat texCoordH = 1.0;
-	if (!NPOT_textures) {
-		picWidth = getNextPOT(picWidth);
-		picHeight = getNextPOT(picHeight);
-		texCoordW = ((double)realPicWidth) / picWidth;
-		texCoordH = ((double)realPicHeight) / picHeight;
 	}
 
 	if (reserve) {
@@ -1139,9 +1123,10 @@ bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
 			}
 		}
 	}
+	return true;
+}
 
-	GLuint tmpTex;
-
+void makeGlArray(GLuint &tmpTex, const GLubyte *texture, int picWidth, int picHeight) {
 	glGenTextures(1, &tmpTex);
 	glBindTexture(GL_TEXTURE_2D, tmpTex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1153,12 +1138,19 @@ bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	}
+	texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, picWidth, picHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture, tmpTex);
 
-	texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, picWidth, picHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, backdropTexture, tmpTex);
+}
 
-
-	//glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
+void renderToTexture(GLuint tmpTex, int x, int y, int picWidth, int picHeight, int realPicWidth, int realPicHeight) {
+	GLfloat texCoordW = 1.0;
+	GLfloat texCoordH = 1.0;
+	if (!NPOT_textures) {
+		picWidth = getNextPOT(picWidth);
+		picHeight = getNextPOT(picHeight);
+		texCoordW = ((double)realPicWidth) / picWidth;
+		texCoordH = ((double)realPicHeight) / picHeight;
+	}
 
 	float btx1;
 	float btx2;
@@ -1258,9 +1250,24 @@ bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
 
 		xoffset += viewportWidth;
 	}
-	deleteTextures(1, &tmpTex);
-
 	setPixelCoords(false);
+}
+#endif
+
+bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
+#if 0
+	int picWidth, picHeight;
+	int realPicWidth, realPicHeight;
+
+	if (!loadImage(backdropTexture, picWidth, picHeight, realPicWidth, realPicHeight, stream, x, y, reserve))
+		return false;
+
+	GLuint tmpTex;
+	makeGlArray(tmpTex, backdropTexture, picWidth, picHeight);
+
+	renderToTexture(tmpTex, x, y, picWidth, picHeight, realPicWidth, realPicHeight);
+
+	deleteTextures(1, &tmpTex);
 
 	backdropExists = true;
 #endif
@@ -1530,6 +1537,10 @@ void saveCorePNG(Common::WriteStream *stream, GLuint texture, int w, int h) {
 	glDeleteFramebuffers(1, &new_fbo);
 #else
 	setPixelCoords(true);
+
+
+	//glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 	const GLfloat texCoords[] = {
 		0.0f, 0.0f,
 		1.0f, 0.0f,
