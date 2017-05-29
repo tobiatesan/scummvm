@@ -54,8 +54,10 @@
 #include "talk.h"
 #include "sludger.h"
 #include "statusba.h"
-
+#include "variable.h"
 #include "CommonCode/version.h"
+
+namespace Sludge {
 
 extern inputType input;
 
@@ -1751,3 +1753,5 @@ bool getRGBIntoStack(unsigned int x, unsigned int y, stackHandler *sH) {
 #endif
 	return true;
 }
+
+} // End of namespace Sludge

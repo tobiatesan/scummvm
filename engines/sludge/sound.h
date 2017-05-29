@@ -20,12 +20,16 @@
  *
  */
 #include "variable.h"
+#ifndef SLUDGE_SOUND_H
+#define SLUDGE_SOUND_H
+
 #ifdef _WIN32
 #include <windows.h>
 #else
 #define HWND void *
 #endif
 
+namespace Sludge {
 
 // Sound list stuff
 struct soundList {
@@ -69,3 +73,7 @@ void saveSounds(FILE *fp);
 #endif
 
 unsigned int getSoundSource(int index);
+
+} // End of namespace Sludge
+
+#endif

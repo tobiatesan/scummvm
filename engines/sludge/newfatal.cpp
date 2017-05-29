@@ -38,6 +38,8 @@
 #include "errors.h"
 #include "graphics.h"
 
+namespace Sludge {
+
 const char emergencyMemoryMessage[] = "Out of memory displaying error message!";
 
 static char *fatalMessage = NULL;
@@ -156,3 +158,5 @@ int fatal(const char *str1, const char *str2) {
 	} else fatal(emergencyMemoryMessage);
 	return 0;
 }
+
+} // End of namespace Sludge

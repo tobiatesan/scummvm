@@ -36,6 +36,8 @@
 #endif
 #endif
 
+namespace Sludge {
+
 bool allowAnyFilename = true;
 
 #if ALLOW_FILE
@@ -322,3 +324,5 @@ char *decodeFilename(char *nameIn) {
 		return copyString(nameIn);
 	}
 }
+
+} // End of namespace Sludge

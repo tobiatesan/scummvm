@@ -27,6 +27,8 @@
 #include "shaders.h"
 #include "graphics.h"
 
+namespace Sludge {
+
 extern char *bundleFolder;
 
 //Function from: http://www.evl.uic.edu/aej/594/code/ogl.cpp
@@ -175,4 +177,4 @@ int buildShaders(const char *vertexShader, const char *fragmentShader) {
 	return prog;
 }
 
-
+} // End of namespace Sludge

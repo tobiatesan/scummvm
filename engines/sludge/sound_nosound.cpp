@@ -27,6 +27,8 @@
 #include "moreio.h"
 #include "fileset.h"
 
+namespace Sludge {
+
 bool soundOK = false;
 
 int defVol = 128;
@@ -133,3 +135,5 @@ bool getSoundCacheStack(stackHandler *sH) {
 //#pragma unused (sH)
 	return true;
 }
+
+} // End of namespace Sludge

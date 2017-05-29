@@ -56,6 +56,8 @@
 #include "graphics.h"
 #include "CommonCode/utf8.h"
 
+namespace Sludge {
+
 extern char *gamePath;
 
 int speechMode = 0;
@@ -2543,3 +2545,4 @@ builtReturn callBuiltIn(int whichFunc, int numParams, loadedFunction *fun) {
 	return BR_ERROR;
 }
 
+} // End of namespace Sludge

@@ -33,6 +33,8 @@
 #define EFFECT_CHANNELS 8
 #define TOTAL_CHANNELS 32
 
+namespace Sludge {
+
 bool soundOK = false;
 
 struct soundThing {
@@ -389,3 +391,4 @@ bool getSoundCacheStack(stackHandler *sH) {
 	return true;
 }
 
+} // End of namespace Sludge

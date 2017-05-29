@@ -45,6 +45,8 @@
 
 #include "shaders.h"
 
+namespace Sludge {
+
 extern zBufferData zBuffer;
 
 #if 0
@@ -1109,3 +1111,4 @@ void fixScaleSprite(int x, int y, sprite &single, const spritePalette &fontPal, 
 #endif
 }
 
+} // End of namespace Sludge

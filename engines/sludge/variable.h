@@ -22,6 +22,7 @@
 #ifndef SLUDGE_VARIABLE_H
 #define SLUDGE_VARIABLE_H
 
+namespace Sludge {
 enum variableType {SVT_NULL, SVT_INT, SVT_FUNC, SVT_STRING,
                    SVT_BUILT, SVT_FILE, SVT_STACK,
                    SVT_OBJTYPE, SVT_ANIM, SVT_COSTUME,
@@ -114,6 +115,7 @@ variable *fastArrayGetByIndex(fastArrayHandler *vS, unsigned int theIndex);
 #define stackDebug(a)  {}
 #endif
 
+} // End of namespace Sludge
 
 #endif
 

@@ -31,6 +31,8 @@
 #include "graphics.h"
 #include "newfatal.h"
 
+namespace Sludge {
+
 bool freeze();
 void unfreeze(bool);    // Because FREEZE.H needs a load of other includes
 
@@ -264,3 +266,5 @@ bool skipThumbnail(FILE *fp) {
 	return (fgetc(fp) == '!');
 }
 #endif
+
+} // End of namespace Sludge

@@ -34,6 +34,8 @@
 #include "variable.h"
 #include "graphics.h"
 
+namespace Sludge {
+
 enum {
 	LIGHTMAPMODE_NONE       = -1,
 	LIGHTMAPMODE_HOTSPOT,
@@ -101,3 +103,5 @@ void saveSnapshot(FILE *fp);
 bool restoreSnapshot(FILE *fp);
 #endif
 #endif
+
+} // End of namespace Sludge

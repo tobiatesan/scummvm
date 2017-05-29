@@ -41,6 +41,8 @@
 #include "fileset.h"
 #include "debug.h"
 
+namespace Sludge {
+
 //----------------------------------------------------------------------
 // From elsewhere
 //----------------------------------------------------------------------
@@ -676,3 +678,5 @@ bool loadGame(char *fname) {
 	clearStackLib();
 	return true;
 }
+
+} // End of namespace Sludge

@@ -65,6 +65,7 @@
 
 #include "debug.h"
 
+namespace Sludge {
 
 extern personaAnimation *mouseCursorAnim;
 extern spritePalette pastePalette;
@@ -1561,3 +1562,5 @@ bool handleInput() {
 	lastRegion = overRegion;
 	return runSludge();
 }
+
+} // End of namespace Sludge

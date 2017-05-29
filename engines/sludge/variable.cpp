@@ -40,6 +40,8 @@
 
 #endif
 
+namespace Sludge {
+
 const char *typeName[] = {"undefined", "number", "user function", "string",
                           "built-in function", "file", "stack",
                           "object type", "animation", "costume"
@@ -667,3 +669,5 @@ void debugVar (FILE * fp, const variable & thisVar) {
     }
 }
 */
+
+} // End of namespace Sludge

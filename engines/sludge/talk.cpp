@@ -37,6 +37,8 @@
 #include "stringy.h"
 #include "moreio.h"
 
+namespace Sludge {
+
 extern int fontHeight, cameraX, cameraY, speechMode;
 extern float cameraZoom;
 speechStruct *speech;
@@ -272,3 +274,5 @@ bool loadSpeech(speechStruct *sS, FILE *fp) {
 	return true;
 }
 #endif
+
+} // End of namespace Sludge

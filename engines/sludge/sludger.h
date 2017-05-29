@@ -28,6 +28,8 @@
 #include "csludge.h"
 #include "language.h"
 
+namespace Sludge {
+
 #ifndef _WIN32
 typedef struct _FILETIME {
 	uint32_t dwLowDateTime;
@@ -94,5 +96,7 @@ void unfreezeSubs();
 void completeTimers();
 void killSpeechTimers();
 int cancelAFunction(int funcNum, loadedFunction *myself, bool &killedMyself);
+
+} // End of namespace Sludge
 
 #endif

@@ -32,6 +32,8 @@
 extern GLuint snapshotTextureName;
 #endif
 
+namespace Sludge {
+
 extern unsigned char brightnessLevel;
 
 extern float snapTexW, snapTexH;
@@ -406,3 +408,5 @@ void fixBrightness() {
 
 	}
 }
+
+} // End of namespace Sludge

@@ -28,6 +28,8 @@
 #include "debug.h"
 #include "language.h"
 
+namespace Sludge {
+
 void debugOut(const char *a, ...) {
 	if (! gameSettings.debugMode) return;
 
@@ -50,3 +52,5 @@ void debugOut(const char *a, ...) {
 void debugHeader() {
 	debugOut("*** Engine compiled " __DATE__ " at " __TIME__ ".\n");
 }
+
+} // End of namespace Sludge
