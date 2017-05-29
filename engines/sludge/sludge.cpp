@@ -29,6 +29,7 @@
 #include "engines/util.h"
 
 #include "sludge/sludge.h"
+#include "main_loop.h"
 
 namespace Sludge {
 
@@ -65,7 +66,7 @@ Common::Error SludgeEngine::run() {
 	_console = new SludgeConsole(this);
 
 	// debug log
-	debug("SludgeEngine::init");
+	main_loop("Welcome.slg");
 
 	return Common::kNoError;
 }
