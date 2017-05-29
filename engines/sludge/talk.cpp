@@ -284,9 +284,8 @@ bool loadSpeech(speechStruct *sS, Common::SeekableReadStream *stream) {
 		(* viewLine) = newOne;
 		viewLine = &(newOne->next);
 	}
-
-	return true;
 #endif
+	return true;
 }
 
 } // End of namespace Sludge

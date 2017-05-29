@@ -132,8 +132,8 @@ bool saveThumbnail(Common::WriteStream *stream) {
 		unfreeze(true);
 	}
 	fputc('!', fp);
-	return true;
 #endif
+	return true;
 }
 
 void showThumbnail(char *filename, int atX, int atY) {

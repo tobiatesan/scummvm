@@ -368,62 +368,6 @@ void saveTexture(GLuint tex, GLubyte *data) {
 	glViewport(old_vp[0], old_vp[1], old_vp[2], old_vp[3]);
 	glBindFramebuffer(GL_FRAMEBUFFER, old_fbo);
 }
-#elif defined _WIN32
-// Replacement for glGetTexImage, because some ATI drivers are buggy.
-void saveTexture(GLuint tex, GLubyte *data) {
-	setPixelCoords(true);
-
-	glBindTexture(GL_TEXTURE_2D, tex);
-
-	GLint tw, th;
-	getTextureDimensions(tex, &tw, &th);
-
-	//glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-	int xoffset = 0;
-	while (xoffset < tw) {
-		int w = (tw - xoffset < viewportWidth) ? tw - xoffset : viewportWidth;
-
-		int yoffset = 0;
-		while (yoffset < th) {
-			int h = (th - yoffset < viewportHeight) ? th - yoffset : viewportHeight;
-
-			glClear(GL_COLOR_BUFFER_BIT);   // Clear The Screen
-
-			const GLfloat vertices[] = {
-				(GLfloat) - xoffset, (GLfloat) - yoffset, 0.f,
-				(GLfloat)tw - xoffset, (GLfloat) - yoffset, 0.f,
-				(GLfloat) - xoffset, (GLfloat) - yoffset + th, 0.f,
-				(GLfloat)tw - xoffset, (GLfloat) - yoffset + th, 0.f
-			};
-
-			const GLfloat texCoords[] = {
-				0.0f, 0.0f,
-				1.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f
-			};
-
-			glUseProgram(shader.texture);
-			setPMVMatrix(shader.texture);
-
-			drawQuad(shader.texture, vertices, 1, texCoords);
-			glUseProgram(0);
-
-			for (int i = 0; i < h; i++) {
-				glReadPixels(viewportOffsetX, viewportOffsetY + i, w, 1, GL_RGBA, GL_UNSIGNED_BYTE, data + xoffset * 4 + (yoffset + i) * 4 * tw);
-			}
-
-			yoffset += viewportHeight;
-		}
-
-		xoffset += viewportWidth;
-	}
-	//glReadPixels(viewportOffsetX, viewportOffsetY, tw, th, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-	setPixelCoords(false);
-
-}
 #else
 #if 0
 void saveTexture(GLuint tex, GLubyte *data) {

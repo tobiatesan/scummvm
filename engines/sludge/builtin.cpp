@@ -951,11 +951,7 @@ builtIn(launch) {
 		launchMe = copyString(newTextA);
 	} else {
 		char *gameDir;
-#ifdef _WIN32
-		gameDir = joinStrings(gamePath, "\\");
-#else
 		gameDir = joinStrings(gamePath, "/");
-#endif
 		launchMe = joinStrings(gameDir, newText);
 		delete newText;
 		if (!launchMe) return BR_ERROR;

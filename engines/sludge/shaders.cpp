@@ -33,9 +33,10 @@ extern char *bundleFolder;
 //Read in a textfile (GLSL program)
 // we need to pass it as a string to the GLSL driver
 char *shaderFileRead(const char *name) {
-	Common::File fd;
 	char *content = NULL;
 	char *fn = joinStrings(bundleFolder, name);
+#if 0
+	Common::File fd;
 
 	int count = 0;
 
@@ -55,6 +56,7 @@ char *shaderFileRead(const char *name) {
 		}
 	}
 	delete fn;
+#endif
 	return content;
 }
 

@@ -32,12 +32,7 @@
 #include "sludge.h"
 #include "common/debug.h"
 
-#include <dirent.h>
 #include "moreio.h"
-#ifdef _WIN32
-#include "windows.h"
-
-#endif
 
 namespace Sludge {
 
@@ -152,46 +147,14 @@ int stackSize(const stackHandler *me) {
 	return r;
 }
 
-#ifdef _WIN32
-#include <windows.h>
-WCHAR *ConvertToUTF16(const char *input);
-char *ConvertFromUTF16(const WCHAR *input);
-#endif
-
 bool getSavedGamesStack(stackHandler *sH, char *ext) {
+#if 0
 	char *pattern = joinStrings("*", ext);
 	if (!pattern)
 		return false;
 
 	variable newName;
 	newName.varType = SVT_NULL;
-
-#ifdef _WIN32
-
-	WCHAR *w_pattern = ConvertToUTF16(pattern);
-
-	WIN32_FIND_DATA theData;
-	HANDLE handle = FindFirstFile(w_pattern, & theData);
-
-	delete w_pattern;
-
-	if (handle != INVALID_HANDLE_VALUE) {
-		bool keepGoing;
-		do {
-			theData.cFileName[lstrlen(theData.cFileName) - strlen(ext)] = TEXT('\0');
-			char *fileName = ConvertFromUTF16(theData.cFileName);
-			char *decoded = decodeFilename(fileName);
-			makeTextVar(newName, decoded);
-			delete fileName;
-			delete decoded;
-			if (! addVarToStack(newName, sH -> first)) return false;
-			if (sH -> last == NULL) sH -> last = sH -> first;
-			keepGoing = FindNextFile(handle, & theData);
-		}while (keepGoing);
-		FindClose(handle);
-	}
-
-#else
 
 	DIR *dir = opendir(".");
 	if (!dir)
@@ -215,10 +178,9 @@ bool getSavedGamesStack(stackHandler *sH, char *ext) {
 
 	closedir(dir);
 
-#endif
-
 	delete[] pattern;
 	pattern = NULL;
+#endif
 	return true;
 }
 

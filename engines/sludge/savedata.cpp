@@ -20,7 +20,9 @@
  *
  */
 #include <stdint.h>
+#if 0
 #include <unistd.h>
+#endif 
 #include <string.h>
 
 #include "allfiles.h"

@@ -24,9 +24,6 @@
 #endif
 
 #if 0
-#ifdef _WIN32
-#include "winstuff.h"
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,11 +75,7 @@
 
 namespace Sludge {
 
-#ifdef _WIN32
-#define PATHSLASH '\\'
-#else
 #define PATHSLASH '/'
-#endif
 
 extern bool runningFullscreen;
 
@@ -143,10 +136,6 @@ void setGameFilePath(char *f) {
 void saveHSI(Common::WriteStream *writer);
 
 extern bool reallyWantToQuit;
-
-#ifdef _WIN32
-#undef main
-#endif
 
 int weAreDoneSoQuit;
 
@@ -420,13 +409,6 @@ int main_loop(char *filename)
 	SDL_putenv((char *)"SDL_ENABLEAPPEVENTS=1");
 
 	setupOpenGLStuff();
-#endif
-
-#ifdef _WIN32
-	SDL_SysWMinfo wmInfo;
-	SDL_VERSION(&wmInfo.version);
-	SDL_GetWMInfo(&wmInfo);
-	hMainWindow = wmInfo.window;
 #endif
 
 	registerWindowForFatal();

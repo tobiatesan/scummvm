@@ -1136,6 +1136,7 @@ bool loadByteArray(int &picWidth, int &picHeight, int &realPicWidth,
 		}
 	}
 #endif
+	return true;
 }
 
 bool loadImage(int &picWidth, int &picHeight, int &realPicWidth,
