@@ -56,6 +56,10 @@
 #include "statusba.h"
 #include "variable.h"
 #include "CommonCode/version.h"
+#include "common/debug.h"
+#include "image/png.h"
+#include "graphics/surface.h"
+#include "sludge.h"
 
 namespace Sludge {
 
@@ -76,6 +80,8 @@ texture lightMap;
 
 GLuint snapshotTextureName = 0;
 #endif
+
+Graphics::Surface backdropSurface;
 
 float snapTexW = 1.0;
 float snapTexH = 1.0;
@@ -306,8 +312,8 @@ bool resizeBackdrop(int x, int y) {
 }
 
 void loadBackDrop(int fileNum, int x, int y) {
+	debug(kSludgeDebugGraphics, "Load back drop");
 	setResourceForFatal(fileNum);
-#if 0
 	if (!openFileFromNum(fileNum)) {
 		fatal("Can't load overlay image");
 		return;
@@ -320,7 +326,6 @@ void loadBackDrop(int fileNum, int x, int y) {
 	}
 
 	finishAccess();
-#endif
 	setResourceForFatal(-1);
 }
 
@@ -1007,8 +1012,16 @@ bool loadParallax(unsigned short v, unsigned short fracX, unsigned short fracY) 
 
 extern int viewportOffsetX, viewportOffsetY;
 
+bool loadPng(int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, bool reserve) {
+	debug("Loading back drop png.");
+	::Image::PNGDecoder png;
+	if (!png.loadStream(*stream))
+		return false;
+	backdropSurface.copyFrom(*(png.getSurface()));
+	picWidth = realPicWidth = backdropSurface.w;
+	picHeight = realPicHeight = backdropSurface.h;
+	return true;
 #if 0
-bool loadPng(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, bool reserve) {
 	long file_pointer = stream->pos();
 
 	png_structp png_ptr;
@@ -1077,9 +1090,11 @@ bool loadPng(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWidth
 	png_read_image(png_ptr, (png_byte **) row_pointers);
 	png_read_end(png_ptr, NULL);
 	png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+#endif
 }
 
-bool loadByteArray(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, bool reserve) {
+bool loadByteArray(int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, bool reserve) {
+#if 0
 	int32_t transCol = reserve ? -1 : 63519;
 	int t1, t2, n;
 	unsigned short c;
@@ -1117,12 +1132,13 @@ bool loadByteArray(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPi
 			}
 		}
 	}
+#endif
 }
 
-bool loadImage(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, int x, int y, bool reserve) {
-
-	if (!loadPng(loadhere, picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
-		if (!loadByteArray(loadhere, picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
+bool loadImage(int &picWidth, int &picHeight, int &realPicWidth, int &realPicHeight, Common::SeekableReadStream *stream, int x, int y, bool reserve) {
+	debug(kSludgeDebugGraphics, "Loading back drop image.");
+	if (!loadPng(picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
+		if (!loadByteArray(picWidth, picHeight, realPicWidth, realPicHeight, stream, reserve)) {
 			return false;
 		}
 	}
@@ -1134,6 +1150,7 @@ bool loadImage(GLubyte *loadhere, int &picWidth, int &picHeight, int &realPicWid
 	return true;
 }
 
+#if 0
 void makeGlArray(GLuint &tmpTex, const GLubyte *texture, int picWidth, int picHeight) {
 	glGenTextures(1, &tmpTex);
 	glBindTexture(GL_TEXTURE_2D, tmpTex);
@@ -1263,13 +1280,13 @@ void renderToTexture(GLuint tmpTex, int x, int y, int picWidth, int picHeight, i
 #endif
 
 bool loadHSI(Common::SeekableReadStream *stream, int x, int y, bool reserve) {
-#if 0
+	debug(kSludgeDebugGraphics, "Load HSI");
 	int picWidth, picHeight;
 	int realPicWidth, realPicHeight;
 
-	if (!loadImage(backdropTexture, picWidth, picHeight, realPicWidth, realPicHeight, stream, x, y, reserve))
+	if (!loadImage(picWidth, picHeight, realPicWidth, realPicHeight, stream, x, y, reserve))
 		return false;
-
+#if 0
 	GLuint tmpTex;
 	makeGlArray(tmpTex, backdropTexture, picWidth, picHeight);
 
