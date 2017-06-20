@@ -213,7 +213,7 @@ void Lingo::processFrameEvent(LEvent event) {
 	} else {
 		int entity;
 
-		if (event == kEventPrepareFrame) {
+		if (event == kEventPrepareFrame || event == kEventIdle) {
 			assert(score->_frames[score->getCurrentFrame()] != nullptr);
 			entity = score->getCurrentFrame();
 		} else {
@@ -264,6 +264,7 @@ void Lingo::processEvent(LEvent event) {
 			processInputEvent(event);
 			break;
 
+		case kEventIdle:
 		case kEventEnterFrame:
 		case kEventExitFrame:
 			processFrameEvent(event);
@@ -272,7 +273,6 @@ void Lingo::processEvent(LEvent event) {
 		case kEventStart:
 		case kEventStartMovie:
 		case kEventStopMovie:
-		case kEventIdle:
 		case kEventTimeout:
 			processGenericEvent(event);
 			break;
