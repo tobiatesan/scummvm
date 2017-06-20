@@ -221,7 +221,6 @@ void Lingo::processFrameEvent(LEvent event) {
 }
 
 void Lingo::processGenericEvent(LEvent event) {
-	// Primary Event handler
 	// Movie Script
 }
 
