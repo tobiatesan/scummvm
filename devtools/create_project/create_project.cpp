@@ -1579,6 +1579,9 @@ void ProjectProvider::addFilesToProject(const std::string &dir, std::ofstream &p
 }
 
 void ProjectProvider::createModuleList(const std::string &moduleDir, const StringList &defines, StringList &testDirs, StringList &includeList, StringList &excludeList) const {
+	int shadowedBlocks = 0; 
+	// Workaround so that any if blocks nested inside a if block with an unmet condition ("shadowed blocks") are handled with push(false) even if their condition is satisfied.
+	// Otherwise, in if false \n if true \n foo \n endif\n endif foo is evaluated.
 	const std::string moduleMkFile = moduleDir + "/module.mk";
 	std::ifstream moduleMk(moduleMkFile.c_str());
 	if (!moduleMk)
@@ -1767,29 +1770,45 @@ void ProjectProvider::createModuleList(const std::string &moduleDir, const Strin
 				error("Malformed ifdef in " + moduleMkFile);
 			++i;
 
-			if (std::find(defines.begin(), defines.end(), *i) == defines.end())
+			if (std::find(defines.begin(), defines.end(), *i) == defines.end() || shadowedBlocks > 0) {
 				shouldInclude.push(false);
-			else
+				shadowedBlocks++;
+			} else {
 				shouldInclude.push(true);
+			}
 		} else if (*i == "ifndef") {
 			if (tokens.size() < 2)
 				error("Malformed ifndef in " + moduleMkFile);
 			++i;
 
-			if (std::find(defines.begin(), defines.end(), *i) == defines.end())
+			if (std::find(defines.begin(), defines.end(), *i) == defines.end() && shadowedBlocks == 0) {
 				shouldInclude.push(true);
-			else
+			} else {
+				shadowedBlocks++;
 				shouldInclude.push(false);
+			}
 		} else if (*i == "else") {
-			shouldInclude.top() = !shouldInclude.top();
+			if (shadowedBlocks == 0) {
+				shouldInclude.top() = !shouldInclude.top();
+				shadowedBlocks++;
+			} else {
+				assert(shouldInclude.top() == false);
+				if (shadowedBlocks == 1) {
+					shouldInclude.top() = !shouldInclude.top();
+					shadowedBlocks--;
+					assert(shouldInclude.top() == true);
+				}
+			}
 		} else if (*i == "endif") {
 			if (shouldInclude.size() <= 1)
 				error("endif without ifdef found in " + moduleMkFile);
 			shouldInclude.pop();
+			shadowedBlocks--;
 		} else if (*i == "elif") {
 			error("Unsupported operation 'elif' in " + moduleMkFile);
 		} else if (*i == "ifeq") {
-			//XXX
+			// warning("'ifeq' not supported by create_project, evaluated to false in " + moduleMkFile);
+			shadowedBlocks++;
 			shouldInclude.push(false);
 		}
 	}
