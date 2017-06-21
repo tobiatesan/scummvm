@@ -20,8 +20,6 @@ MODULE_OBJS := \
 	timer/default/default-timer.o
 
 ifdef USE_CLOUD
-
-ifdef USE_LIBCURL
 MODULE_OBJS += \
 	cloud/cloudicon.o \
 	cloud/cloudmanager.o \
@@ -55,7 +53,6 @@ MODULE_OBJS += \
 	cloud/onedrive/onedrivetokenrefresher.o \
 	cloud/onedrive/onedrivelistdirectoryrequest.o \
 	cloud/onedrive/onedriveuploadrequest.o
-endif
 endif
 
 ifdef USE_LIBCURL
