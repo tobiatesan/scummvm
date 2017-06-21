@@ -199,10 +199,7 @@ void Lingo::processFrameEvent(LEvent event) {
 	 * are sent to a frame script and then a movie script.  If the
 	 * current frame has no frame script when the event occurs, the
 	 * message goes to movie scripts.
-	 * [...]
-	 * If more than one movie script handles the same message, Lingo
-	 * searches the movie scripts according to their order in the cast
-	 * window [p.81 of D4 docs]
+	 * [p.81 of D4 docs]
 	 */
 	// TODO: Same for D2-3 or not?
 	Score *score = _vm->getCurrentScore();
@@ -227,12 +224,10 @@ void Lingo::processFrameEvent(LEvent event) {
 					 kFrameScript,
 					 entity);
 
-		// processEvent(event,
-		//			 kMovieScript,
-		//			 ?);
-		debugC(3, kDebugLingoExec, "STUB: processEvent(event, kMovieScript, ?)");
-		// TODO: Which id to pass?
 	}
+
+	runMovieScript(event);
+
 }
 
 void Lingo::processGenericEvent(LEvent event) {
@@ -243,6 +238,21 @@ void Lingo::processGenericEvent(LEvent event) {
 	else
 		warning ("STUB: processGenericEvent called for something else than kEventStart or kEventPrepareMovie, additional logic probably needed");
 	g_lingo->processEvent(event, kMovieScript, id);
+}
+
+void Lingo::processSpriteEvent(LEvent event) {
+	Score *score = _vm->getCurrentScore();
+	Frame *currentFrame = score->_frames[score->getCurrentFrame()];
+	if (event == kEventBeginSprite) {
+		// TODO: Check if this is also possibly a kSpriteScript?
+		for (uint16 i = 0; i < CHANNEL_COUNT; i++)
+			if (currentFrame->_sprites[i]->_enabled)
+				g_lingo->processEvent(event, kCastScript, currentFrame->_sprites[i]->_scriptId);
+
+	} else {
+		warning ("STUB: processSpriteEvent called for something else than kEventBeginSprite, additional logic probably needed");
+	}
+
 }
 
 void Lingo::processEvent(LEvent event) {
@@ -266,7 +276,8 @@ void Lingo::processEvent(LEvent event) {
 		case kEventTimeout:
 			processGenericEvent(event);
 			break;
-
+		case kEventBeginSprite:
+			processSpriteEvent(event);
 		default:
 			warning("processEvent: Unhandled event %s", _eventHandlerTypes[event]);
 	}
